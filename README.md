@@ -98,8 +98,8 @@ The superior performance of the Factorization Machine in this comparison likely 
 
 1.  **Clone the Repository**:
     ```bash
-    git clone [https://github.com/your-username/movie-recommendation-system.git](https://github.com/your-username/movie-recommendation-system.git)
-    cd movie-recommendation-system
+    cd "Your Directory"
+    git clone https://github.com/Dochikhoa2006/MovieLens-100K-Recommender-System.git
     ```
 
 2.  **Install Dependencies**:
@@ -134,9 +134,9 @@ This project is licensed under the **CC-BY (Creative Commons Attribution)** lice
 
 ## Citation
 
-Do, Chi Khoa (2026). *Sleep Health and Lifestyle Dataset Analysis and Prediction*.  
+Do, Chi Khoa (2026). *MovieLens 100k*.  
 
-🔗 [Project Link](https://github.com/Dochikhoa2006/Sleeping-Disorder-Analysis)
+🔗 [Project Link](https://github.com/Dochikhoa2006/MovieLens-100K-Recommender-System)
 
 ## Acknowledgements
 
@@ -147,7 +147,7 @@ This README structure is inspired by data documentation guidelines from:
 
 The Factorization_Machine_Library.py is inspired by data documentation guidelines from:
 
-- [Code Signal](https://codesignal.com/learn/courses/content-based-recommendation-systems/lessons/implementing-factorization-machines)
+- [CodeSignal](https://codesignal.com/learn/courses/content-based-recommendation-systems/lessons/implementing-factorization-machines)
 - [GeeksforGeeks](https://www.geeksforgeeks.org/machine-learning/probabilistic-matrix-factorization/)
 
 This project utilizes the **Sleep Health and Lifestyle Dataset**, available on Kaggle:
