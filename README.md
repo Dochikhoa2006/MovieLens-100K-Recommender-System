@@ -4,7 +4,7 @@
 The goal of this project is to build a movie recommendation system that predicts user ratings for movies and provides personalized recommendations. We use a **Factorization Machine** model to capture the interaction between users and movies. The model is trained on a movie rating dataset and its performance is evaluated using **Root Mean Squared Error (RMSE)**. The current project demonstrates the process of data processing, training, comparison with a library-based model, and a basic recommendation system in the inference phase.
 
 
-## Dataset Information
+## Dataset Information 
 
 The dataset is built for a movie recommendation engine, combining movie metadata, user-generated tags, external links, and a comprehensive set of user ratings.
 
