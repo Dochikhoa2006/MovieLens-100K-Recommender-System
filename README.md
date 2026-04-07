@@ -41,6 +41,7 @@ The dataset is built for a movie recommendation engine, combining movie metadata
 | `Training_Phase_1.py` | Implemented Factorization Machine and Matrix Factorization. They analyze ratings, movies' genres and users' tags; then processe all into a feature matrix, train the model, and evaluate their performance with RMSE on a test set over multiple folds. |
 | `Training_Phase_2.py` | Factorization Machine (FM) was selected over other models due to superior cross-validation performance. Trained from scratch using Stochastic Gradient Descent (SGD), it adapts the core structure of Training_Phase_1.py while optimizing specifically for the inference stage. Model accuracy is evaluated using RMSE. |
 | `Inference.py` | Uses the trained model to predict ratings for unwatched movies for a specific user and generates a list of top recommended movies. |
+| `Inference_with_Streamlit.py` | Vibe-Coding App of Inference.py. |
 | `Factorization_Machine_Library.py` | External re-built library of fastFM. |
 | `RMSE_COMPARISON.png` | A visualization (a box plot) illustrating Interquartile Range of RMSE of models in `Training_Phase_1.py`.|
 | `movies.csv` | Dataset containing information about movies (e.g., movie ID, title, genre). |
@@ -92,7 +93,7 @@ The superior performance of the Factorization Machine in this comparison likely 
 | **Libraries** | pandas, NumPy, scikit-learn (scikit-fm for library-based FM), matplotlib, seaborn, joblib, surprise, scipy |
 | **Models** | Factorization Machines, Matrix Factorization (plus plus version) |
 | **Techniques** | Alternating Least Squares (ALS), Stochastic Gradient Descent (SGD) |
-| **Web Interface** | Streamlit |
+| **Web Interface** | Streamlit (Vibe-Coding) |
 
 ## How to Run
 
@@ -123,9 +124,15 @@ The superior performance of the Factorization Machine in this comparison likely 
 
 5.  **Inference (Recommendation)**:
     After training, you can use the inference script to get recommendations. You might need to update the script to load your trained model parameters:
-    ```bash
-    python Inference.py
-    ```
+    * To run the Inference Raw Script:
+        ```bash
+        python Inference.py
+        ```
+    * To run the Vibe-Coding App of Inference:
+        ```bash
+        streamlit run Inference_with_Streamlit.py
+        ```
+
 > **Note:** Accessing to directory of scripts before running
 
 ## License
