@@ -1,7 +1,5 @@
 import streamlit as st
-import numpy as np
 import joblib
-import re
 
 st.set_page_config(page_title="Movie Recommender", layout="centered")
 
