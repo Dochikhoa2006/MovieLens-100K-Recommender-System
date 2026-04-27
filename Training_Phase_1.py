@@ -11,10 +11,10 @@ import joblib
 import re
 
 
-Links = pd.read_csv("/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation/MovieLens_100k_Dataset/links.csv")
-Movies = pd.read_csv("/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation/MovieLens_100k_Dataset/movies.csv")
-Ratings = pd.read_csv("/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation/MovieLens_100k_Dataset/ratings.csv")
-Tags = pd.read_csv("/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation/MovieLens_100k_Dataset/tags.csv")
+Links = pd.read_csv("MovieLens_100k_Dataset/links.csv")
+Movies = pd.read_csv("MovieLens_100k_Dataset/movies.csv")
+Ratings = pd.read_csv("MovieLens_100k_Dataset/ratings.csv")
+Tags = pd.read_csv("MovieLens_100k_Dataset/tags.csv")
 
 cross_validation = KFold (n_splits = 10, shuffle = True, random_state = 150)
 train_test_split_ratings = cross_validation.split (Ratings)

@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import joblib
 
-Ratings = pd.read_csv("/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation/MovieLens_100k_Dataset/ratings.csv")
+Ratings = pd.read_csv ("MovieLens_100k_Dataset/ratings.csv")
 
 user_movie_matrix_Tags = joblib.load ("user_movie_matrix_Tags.pkl")
 extract_genre_Movies = joblib.load ("extract_genre_Movies.pkl")

@@ -1,7 +1,8 @@
 streamlit
 joblib
-numpy
+numpy<2.0.0
 scipy
+Cython
 scikit-learn
 scikit-surprise
 pandas
