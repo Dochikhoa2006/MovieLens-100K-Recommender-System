@@ -1,3 +1,9 @@
-
-joblib
 streamlit
+joblib
+numpy
+scipy
+scikit-learn
+scikit-surprise
+pandas
+seaborn
+matplotlib
