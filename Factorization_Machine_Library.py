@@ -85,7 +85,3 @@ class FM_Regression:
             predictions.append(pred)
             
         return np.array(predictions)
-    
-
-
-

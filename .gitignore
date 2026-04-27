@@ -1,17 +1,14 @@
 __pycache__/
 *.DS_Store
-*.py[cod]
-*$py.class
 .venv/
-env/
-venv/
-ENV/
+.venv_310/
+
 *.csv
 *.zip
 *.parquet
-ml-100k/
 *.pkl
 *.h5
 *.pth
 
-.venv_310/
+ml-100k/
+run_script

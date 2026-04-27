@@ -325,15 +325,3 @@ if __name__ == "__main__":
     joblib.dump (extract_title_Movies, "extract_title_Movies.pkl")
     joblib.dump (extract_imdb_Links, "extract_imdb_Links.pkl")
     joblib.dump (extract_tmdb_links, "extract_tmdb_links.pkl")
-
-
-# cd "/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation"
-# /opt/homebrew/bin/python3.12 -m venv .venv
-# source .venv/bin/activate
-# pip install pandas scikit-learn numpy seaborn joblib scikit-surprise "numpy<2.0.0" 
-# python "/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation/Training_Phase_1.py"
-
-
-
-
-

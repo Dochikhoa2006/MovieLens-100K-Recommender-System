@@ -69,11 +69,3 @@ if st.button("Get Recommendations"):
                         st.markdown(f"[🔗 View on TMDB](https://www.themoviedb.org/movie/{tmdb}/)")
                     else:
                         st.write("TMDB Link: Not available")
-
-
-
-# cd "/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation"
-# /opt/homebrew/bin/python3.12 -m venv .venv
-# source .venv/bin/activate
-# pip install pandas scikit-learn numpy seaborn joblib regex scikit-surprise streamlit
-# streamlit run "/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation/Inference_with_Streamlit.py"

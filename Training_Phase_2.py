@@ -36,16 +36,3 @@ FM.train_model (model)
 
 joblib.dump (model, "Factorization_Model_Trained.pkl")
 joblib.dump (FM, "FM.pkl")
-
-
-
-
-
-
-
-
-# cd "/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation"
-# /opt/homebrew/bin/python3.12 -m venv .venv
-# source .venv/bin/activate
-# pip install pandas scikit-learn numpy seaborn joblib scikit-surprise "numpy<2.0.0" 
-# python "/Users/chikhoado/Desktop/PROJECTS/Movie Recommendation/Training_Phase_2.py"
