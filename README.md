@@ -95,7 +95,7 @@ The superior performance of the Factorization Machine in this comparison likely 
 | **Techniques** | Alternating Least Squares (ALS), Stochastic Gradient Descent (SGD) |
 | **Web Interface** | Streamlit (Vibe-Coding) |
 
-## How to Run
+## Set Up
 
 1.  **Clone the Repository**:
     ```bash
@@ -103,37 +103,14 @@ The superior performance of the Factorization Machine in this comparison likely 
     git clone https://github.com/Dochikhoa2006/MovieLens-100K-Recommender-System.git
     ```
 
-2.  **Install Dependencies**:
-    Make sure you have Python and the necessary libraries installed:
-    ```bash
-    pip install pandas numpy scikit-learn matplotlib scikit-fm
-    ```
-
-3.  **Data Preparation**:
-    Ensure `movies.csv`, `tags.csv`, `links.csv`, and `ratings.csv` (the full file) are in the same directory as the scripts.
-
-4.  **Training and Comparison**:
-    * To run the First-Phase Training:
+2.  **Docker**:
+    * To build docker image:
         ```bash
-        python Training_Phase_1.py
-        ```
-    * To run the Second-Phase Training:
+        docker build -t movie-recommendation-system .
+    * To run docker container:
         ```bash
-        python Training_Phase_2.py
+        docker run -p 8501:8501 --name my-streamlit-app movie-recommendation-system
         ```
-
-5.  **Inference (Recommendation)**:
-    After training, you can use the inference script to get recommendations. You might need to update the script to load your trained model parameters:
-    * To run the Inference Raw Script:
-        ```bash
-        python Inference.py
-        ```
-    * To run the Vibe-Coding App of Inference:
-        ```bash
-        streamlit run Inference_with_Streamlit.py
-        ```
-
-> **Note:** Accessing to directory of scripts before running
 
 ## License
 
