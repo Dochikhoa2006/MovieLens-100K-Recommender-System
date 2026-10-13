@@ -50,10 +50,11 @@ if st.button ("Get Recommendations"):
             rating_score = model.predict(X_transformed)
             
             combined = sorted(zip(rating_score, unique_movie_id), reverse=True) 
+            recommendations = combined[:top_k]
             
-            st.success (f"Top {top_k} Recommendations for you:")
+            st.success (f"Top {len(recommendations)} Recommendations for you:")
             
-            for i, (score, movie_id) in enumerate(combined[:top_k]):
+            for i, (score, movie_id) in enumerate(recommendations):
                 title = extract_title_Movies.get(movie_id, "Unknown Title")
                 
                 with st.expander(f"Top {i+1}: {title}"):
