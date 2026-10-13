@@ -58,7 +58,7 @@ def print_recommended_movie (Top_K_Movie):
     X = FM.CSC_Inference (X)
     rating_score = model.predict (X)
     combined = zip (rating_score, unique_movie_id)
-    sort_rating_score = sorted (combined)
+    sort_rating_score = sorted (combined, reverse=True)
 
     print ("\n+", end = '')
     for i in range (Top_K_Movie):
