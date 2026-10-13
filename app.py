@@ -53,8 +53,7 @@ if st.button ("Get Recommendations"):
             
             st.success (f"Top {top_k} Recommendations for you:")
             
-            for i in range(top_k):
-                score, movie_id = combined[i]
+            for i, (score, movie_id) in enumerate(combined[:top_k]):
                 title = extract_title_Movies.get(movie_id, "Unknown Title")
                 
                 with st.expander(f"Top {i+1}: {title}"):
