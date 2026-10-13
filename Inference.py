@@ -61,8 +61,7 @@ def print_recommended_movie (Top_K_Movie):
     sort_rating_score = sorted (combined, reverse=True)
 
     print ("\n+", end = '')
-    for i in range (Top_K_Movie):
-        pair = sort_rating_score[i]
+    for i, pair in enumerate (sort_rating_score[:Top_K_Movie]):
         movie_id = pair[1]
         title = extract_title_Movies[movie_id]  
 
