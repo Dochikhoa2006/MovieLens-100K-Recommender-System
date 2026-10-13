@@ -101,16 +101,19 @@ The superior performance of the Factorization Machine in this comparison likely 
     ```bash
     cd "Your Directory"
     git clone https://github.com/Dochikhoa2006/MovieLens-100K-Recommender-System.git
+    cd MovieLens-100K-Recommender-System
     ```
 
 2.  **Docker**:
     * To build docker image:
         ```bash
         docker build -t movie-recommendation-system .
+        ```
     * To run docker container:
         ```bash
         docker run -p 8501:8501 --name my-streamlit-app movie-recommendation-system
         ```
+    * Open [http://localhost:8501](http://localhost:8501) in your browser.
 
 ## License
 
