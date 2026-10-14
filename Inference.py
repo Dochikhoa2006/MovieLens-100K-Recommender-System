@@ -1,6 +1,5 @@
 import numpy as np
 import joblib
-import re
 from rated_movies import load_rated_movies
 
 model = joblib.load ("Factorization_Model_Trained.pkl")
@@ -31,9 +30,18 @@ def print_recommended_movie (Top_K_Movie):
                 uni = "I dont interested at any above Movie Genres"
             print (f'                        [{index + 1}]: ', uni, sep = '')
     
-    movie_genre_idx = input ("Select your favourite genres (use comma to separate choices): ").strip ()
-    movie_genre_idx = re.split (r',', movie_genre_idx)
-    movie_genre_idx = [int (temp.strip ()) for temp in movie_genre_idx]
+    genre_choices = input ("Select your favourite genres (use comma to separate choices): ")
+    movie_genre_idx = []
+    invalid_choices = []
+    for choice in genre_choices.split (","):
+        choice = choice.strip ()
+        try:
+            movie_genre_idx.append (int (choice))
+        except ValueError:
+            invalid_choices.append (choice or "(blank)")
+
+    if invalid_choices:
+        print (f"\n+ Ignoring non-numeric choices: {', '.join (invalid_choices)}")
 
     print ("\n--------------------- System is processing, please wait... --------------------- ")
     
