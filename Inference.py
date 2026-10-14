@@ -1,6 +1,7 @@
 import numpy as np
 import joblib
 import re
+from rated_movies import load_rated_movies
 
 model = joblib.load ("Factorization_Model_Trained.pkl")
 FM = joblib.load ("FM.pkl")
@@ -9,6 +10,7 @@ genre_dict = joblib.load ("unique_movie_genre.pkl")
 extract_title_Movies = joblib.load ("extract_title_Movies.pkl")
 extract_imdb_Links = joblib.load ("extract_imdb_Links.pkl")
 extract_tmdb_link = joblib.load ("extract_tmdb_links.pkl")
+rated_movies = load_rated_movies()
 
 def print_recommended_movie (Top_K_Movie):
 
@@ -47,8 +49,12 @@ def print_recommended_movie (Top_K_Movie):
     
     movie_genre = [unique_movie_genre[idx - 1] for idx in movie_genre_idx]
     X = []
+    candidate_movie_ids = []
+    already_rated = rated_movies.get(user_id, set())
 
     for movie_id in unique_movie_id:
+        if movie_id in already_rated:
+            continue
 
         datapoint = {
                 "USER_ID": user_id, 
@@ -58,10 +64,15 @@ def print_recommended_movie (Top_K_Movie):
             datapoint[genre] = genre
 
         X.append (datapoint)
+        candidate_movie_ids.append(movie_id)
+
+    if not X:
+        print ("\n+ No unrated movies are available for this user.")
+        return
 
     X = FM.CSC_Inference (X)
     rating_score = model.predict (X)
-    combined = zip (rating_score, unique_movie_id)
+    combined = zip (rating_score, candidate_movie_ids)
     sort_rating_score = sorted (combined, reverse=True)
 
     print ("\n+", end = '')

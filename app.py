@@ -1,5 +1,6 @@
 import streamlit as st
 import joblib
+from rated_movies import load_rated_movies
 
 st.set_page_config (page_title = "Movie Recommender", layout = "centered")
 
@@ -15,6 +16,10 @@ def load_assets ():
     return model, FM, unique_movie_id, genre_dict, extract_title_Movies, extract_imdb_Links, extract_tmdb_link
 
 model, FM, unique_movie_id, genre_dict, extract_title_Movies, extract_imdb_Links, extract_tmdb_link = load_assets ()
+
+@st.cache_data
+def get_rated_movies():
+    return load_rated_movies()
 
 st.title ("🎬 Movie Recommendation System")
 st.markdown ("Enter your ID and favorite genres to get personalized top picks.")
@@ -40,16 +45,25 @@ if st.button ("Get Recommendations"):
     else:
         with st.spinner ("Processing..."):
             X = []
+            candidate_movie_ids = []
+            already_rated = get_rated_movies().get(user_id, set())
             for movie_id in unique_movie_id:
+                if movie_id in already_rated:
+                    continue
                 datapoint = {"USER_ID": user_id, "MOVIE_ID": movie_id}
                 for genre in selected_genres:
                     datapoint[genre] = genre
                 X.append (datapoint)
+                candidate_movie_ids.append(movie_id)
+
+            if not X:
+                st.info("No unrated movies are available for this user.")
+                st.stop()
 
             X_transformed = FM.CSC_Inference(X)
             rating_score = model.predict(X_transformed)
             
-            combined = sorted(zip(rating_score, unique_movie_id), reverse=True) 
+            combined = sorted(zip(rating_score, candidate_movie_ids), reverse=True)
             recommendations = combined[:top_k]
             
             st.success (f"Top {len(recommendations)} Recommendations for you:")
