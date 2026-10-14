@@ -1,8 +1,12 @@
 import csv
 from collections import defaultdict
+from pathlib import Path
 
 
-def load_rated_movies(path="MovieLens_100k_Dataset/ratings.csv"):
+DEFAULT_RATINGS_PATH = Path(__file__).resolve().parent / "MovieLens_100k_Dataset/ratings.csv"
+
+
+def load_rated_movies(path=DEFAULT_RATINGS_PATH):
     """Return movie IDs each user has already rated."""
     rated_movies = defaultdict(set)
     with open(path, newline="", encoding="utf-8") as ratings_file:
