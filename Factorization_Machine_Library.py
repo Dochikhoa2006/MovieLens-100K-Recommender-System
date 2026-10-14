@@ -63,25 +63,14 @@ class FM_Regression:
                 break
 
     def predict(self, X):
-        if sparse.isspmatrix_csc(X):
-            X = X.tocsr()
-            
-        predictions = []
-        for i in range(X.shape[0]):
-            indices = X[i].indices
-            values = X[i].data
-            
-            if len(indices) == 0:
-                predictions.append(self.w0)
-                continue
-            
-            linear_term = self.w0 + np.dot(self.w[indices], values)
-            v_subset = self.V[indices, :]
-            sum_v_x = np.dot(values, v_subset)
-            sum_sq_v_x = np.dot(values**2, v_subset**2)
-            interaction_term = 0.5 * np.sum(sum_v_x**2 - sum_sq_v_x)
-            
-            pred = np.clip(linear_term + interaction_term, 0, 5)
-            predictions.append(pred)
-            
-        return np.array(predictions)
+        X = X.tocsr()
+
+        linear_term = self.w0 + np.asarray(X @ self.w).ravel()
+        sum_v_x = np.asarray(X @ self.V)
+        sum_sq_v_x = np.asarray(X.multiply(X) @ np.square(self.V))
+        interaction_term = 0.5 * np.sum(np.square(sum_v_x) - sum_sq_v_x, axis=1)
+        predictions = np.clip(linear_term + interaction_term, 0, 5)
+
+        # Preserve the global-bias prediction for rows with no known features.
+        predictions[np.diff(X.indptr) == 0] = self.w0
+        return predictions
