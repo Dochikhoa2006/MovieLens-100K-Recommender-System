@@ -117,6 +117,12 @@ The superior performance of the Factorization Machine in this comparison likely 
         ```
     * Open [http://localhost:8501](http://localhost:8501) in your browser.
 
+3.  **Command line inference** (with the dataset and trained `.pkl` files in place):
+    ```bash
+    python Inference.py --user-id 1 --genres 1,8 --top-k 10
+    ```
+    Run `python Inference.py --list-genres` to see genre numbers. Omit `--user-id` or `--genres` to be prompted interactively. Run `python Inference.py --help` for all options.
+
 ## License
 
 This project is licensed under the **CC-BY (Creative Commons Attribution)** license.

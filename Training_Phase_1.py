@@ -9,12 +9,14 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import joblib
 import re
+from pathlib import Path
 
 
-Links = pd.read_csv("MovieLens_100k_Dataset/links.csv")
-Movies = pd.read_csv("MovieLens_100k_Dataset/movies.csv")
-Ratings = pd.read_csv("MovieLens_100k_Dataset/ratings.csv")
-Tags = pd.read_csv("MovieLens_100k_Dataset/tags.csv")
+DATA_DIR = Path(__file__).resolve().parent / "MovieLens_100k_Dataset"
+Links = pd.read_csv(DATA_DIR / "links.csv")
+Movies = pd.read_csv(DATA_DIR / "movies.csv")
+Ratings = pd.read_csv(DATA_DIR / "ratings.csv")
+Tags = pd.read_csv(DATA_DIR / "tags.csv")
 
 cross_validation = KFold (n_splits = 10, shuffle = True, random_state = 150)
 train_test_split_ratings = cross_validation.split (Ratings)
