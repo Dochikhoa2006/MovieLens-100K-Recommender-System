@@ -115,9 +115,9 @@ def print_recommended_movie (Top_K_Movie):
         print ('')
         
 
-try:
-    top_k_movie = 5
-    print_recommended_movie (top_k_movie)
-
-except ValueError as e:
-    print ("\n----------- ERROR: please type only integer AND not leave it blank -----------")
+if __name__ == "__main__":
+    try:
+        top_k_movie = 5
+        print_recommended_movie (top_k_movie)
+    except ValueError:
+        print ("\n----------- ERROR: please type only integer AND not leave it blank -----------")
