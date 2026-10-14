@@ -17,6 +17,10 @@ def print_recommended_movie (Top_K_Movie):
 
     user_id = np.int64 (input ("\n+ Type your User ID (if you dont have, better enter -1): ").strip ())
 
+    if user_id != -1 and user_id not in rated_movies:
+        print ("\n+ Unknown User ID. Enter a known ID or -1 if you are a new user.")
+        return
+
     print ("\n+ List of Movie Genres: ", end = '')
 
     unique_movie_genre = [key for key, value in genre_dict.items ()]

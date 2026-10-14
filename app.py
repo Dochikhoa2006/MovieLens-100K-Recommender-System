@@ -40,13 +40,16 @@ with st.container ():
     top_k = st.slider ("Number of movies to recommend:", 1, 20, 5)
 
 if st.button ("Get Recommendations"):
-    if not selected_genres:
+    rated_movies = get_rated_movies()
+    if user_id != -1 and user_id not in rated_movies:
+        st.warning ("Unknown User ID. Enter a known ID or -1 if you are a new user.")
+    elif not selected_genres:
         st.warning ("Please select at least one genre.")
     else:
         with st.spinner ("Processing..."):
             X = []
             candidate_movie_ids = []
-            already_rated = get_rated_movies().get(user_id, set())
+            already_rated = rated_movies.get(user_id, set())
             for movie_id in unique_movie_id:
                 if movie_id in already_rated:
                     continue
