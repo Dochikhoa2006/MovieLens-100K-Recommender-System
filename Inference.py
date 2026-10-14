@@ -40,6 +40,10 @@ def print_recommended_movie (Top_K_Movie):
         temp = ', '.join (map (str, out_of_range))
         print (f"\n+ Your list contains out of selection range (including: {temp}) so we'll erase them...")
         movie_genre_idx = [idx for idx in movie_genre_idx if 1 <= idx <= len (unique_movie_genre)]
+
+    if not movie_genre_idx:
+        print ("\n+ Please select at least one valid genre.")
+        return
     
     movie_genre = [unique_movie_genre[idx - 1] for idx in movie_genre_idx]
     X = []
