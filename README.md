@@ -75,7 +75,7 @@ Model Selection: The model demonstrating the lowest median RMSE and the highest 
 
 
 ### 5. Inference
-For a given user, the trained model predicts the ratings for all movies they haven't rated. The movies are then sorted by their predicted ratings, and the top-K movies are recommended with their predicted scores out of five.
+For a given user, the model predicts ratings for unrated movies that match at least one selected genre. Each movie is scored using its own genre metadata. The top-K movies are recommended with their predicted scores out of five.
 
 Enter an existing user ID from `ratings.csv`, or `-1` for a new user. Unknown IDs are rejected.
 

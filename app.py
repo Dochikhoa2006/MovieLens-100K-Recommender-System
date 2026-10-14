@@ -1,6 +1,7 @@
 import streamlit as st
 import joblib
 from rated_movies import load_rated_movies
+from recommendation_candidates import build_candidates
 
 st.set_page_config (page_title = "Movie Recommender", layout = "centered")
 
@@ -10,12 +11,13 @@ def load_assets ():
     FM = joblib.load ("FM.pkl")
     unique_movie_id = joblib.load ("unique_movie_id.pkl")
     genre_dict = joblib.load ("unique_movie_genre.pkl")
+    genres_by_movie = joblib.load ("extract_genre_Movies.pkl")
     extract_title_Movies = joblib.load ("extract_title_Movies.pkl")
     extract_imdb_Links = joblib.load ("extract_imdb_Links.pkl")
     extract_tmdb_link = joblib.load ("extract_tmdb_links.pkl")
-    return model, FM, unique_movie_id, genre_dict, extract_title_Movies, extract_imdb_Links, extract_tmdb_link
+    return model, FM, unique_movie_id, genre_dict, genres_by_movie, extract_title_Movies, extract_imdb_Links, extract_tmdb_link
 
-model, FM, unique_movie_id, genre_dict, extract_title_Movies, extract_imdb_Links, extract_tmdb_link = load_assets ()
+model, FM, unique_movie_id, genre_dict, genres_by_movie, extract_title_Movies, extract_imdb_Links, extract_tmdb_link = load_assets ()
 
 @st.cache_data
 def get_rated_movies():
@@ -47,20 +49,13 @@ if st.button ("Get Recommendations"):
         st.warning ("Please select at least one genre.")
     else:
         with st.spinner ("Processing..."):
-            X = []
-            candidate_movie_ids = []
             already_rated = rated_movies.get(user_id, set())
-            for movie_id in unique_movie_id:
-                if movie_id in already_rated:
-                    continue
-                datapoint = {"USER_ID": user_id, "MOVIE_ID": movie_id}
-                for genre in selected_genres:
-                    datapoint[genre] = genre
-                X.append (datapoint)
-                candidate_movie_ids.append(movie_id)
+            X, candidate_movie_ids = build_candidates(
+                user_id, selected_genres, unique_movie_id, genres_by_movie, already_rated
+            )
 
             if not X:
-                st.info("No unrated movies are available for this user.")
+                st.info("No unrated movies match the selected genres.")
                 st.stop()
 
             X_transformed = FM.CSC_Inference(X)

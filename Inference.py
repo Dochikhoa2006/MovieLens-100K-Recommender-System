@@ -1,11 +1,13 @@
 import numpy as np
 import joblib
 from rated_movies import load_rated_movies
+from recommendation_candidates import build_candidates
 
 model = joblib.load ("Factorization_Model_Trained.pkl")
 FM = joblib.load ("FM.pkl")
 unique_movie_id = joblib.load ("unique_movie_id.pkl")
 genre_dict = joblib.load ("unique_movie_genre.pkl")
+genres_by_movie = joblib.load ("extract_genre_Movies.pkl")
 extract_title_Movies = joblib.load ("extract_title_Movies.pkl")
 extract_imdb_Links = joblib.load ("extract_imdb_Links.pkl")
 extract_tmdb_link = joblib.load ("extract_tmdb_links.pkl")
@@ -60,26 +62,13 @@ def print_recommended_movie (Top_K_Movie):
         return
     
     movie_genre = [unique_movie_genre[idx - 1] for idx in movie_genre_idx]
-    X = []
-    candidate_movie_ids = []
     already_rated = rated_movies.get(user_id, set())
-
-    for movie_id in unique_movie_id:
-        if movie_id in already_rated:
-            continue
-
-        datapoint = {
-                "USER_ID": user_id, 
-                "MOVIE_ID": movie_id,
-        }
-        for genre in movie_genre:
-            datapoint[genre] = genre
-
-        X.append (datapoint)
-        candidate_movie_ids.append(movie_id)
+    X, candidate_movie_ids = build_candidates(
+        user_id, movie_genre, unique_movie_id, genres_by_movie, already_rated
+    )
 
     if not X:
-        print ("\n+ No unrated movies are available for this user.")
+        print ("\n+ No unrated movies match the selected genres.")
         return
 
     X = FM.CSC_Inference (X)
