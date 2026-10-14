@@ -1,0 +1,6 @@
+.git
+.venv
+.venv_310
+__pycache__
+*.pyc
+.DS_Store
