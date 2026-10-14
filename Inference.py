@@ -97,11 +97,8 @@ def print_recommended_movie (Top_K_Movie):
         print (f'              Predicted rating: {score:.2f}/5')
 
         if movie_id in extract_imdb_Links:
-            imdb = extract_imdb_Links[movie_id]
-            if len (str (imdb)) == 6:
-                print (f'              IMDB Link: https://www.imdb.com/title/tt0{imdb}/')
-            else:
-                print (f'              IMDB Link: https://www.imdb.com/title/tt{imdb}/')
+            imdb = str (extract_imdb_Links[movie_id]).zfill (7)
+            print (f'              IMDB Link: https://www.imdb.com/title/tt{imdb}/')
         else:
             print (f'               IMDB Link: Sorry! We dont have IMDB Link for this movie :( ')
 
