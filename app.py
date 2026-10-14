@@ -71,7 +71,7 @@ if st.button ("Get Recommendations"):
             for i, (score, movie_id) in enumerate(recommendations):
                 title = extract_title_Movies.get(movie_id, "Unknown Title")
                 
-                with st.expander(f"Top {i+1}: {title}"):
+                with st.expander(f"Top {i+1}: {title} — predicted rating {score:.2f}/5"):
                     if movie_id in extract_imdb_Links:
                         imdb = str(extract_imdb_Links[movie_id]).zfill(7)
                         st.markdown(f"[🔗 View on IMDB](https://www.imdb.com/title/tt{imdb}/)")

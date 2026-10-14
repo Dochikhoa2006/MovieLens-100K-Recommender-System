@@ -77,6 +77,7 @@ def print_recommended_movie (Top_K_Movie):
 
     print ("\n+", end = '')
     for i, pair in enumerate (sort_rating_score[:Top_K_Movie]):
+        score = pair[0]
         movie_id = pair[1]
         title = extract_title_Movies[movie_id]  
 
@@ -85,6 +86,7 @@ def print_recommended_movie (Top_K_Movie):
         else:
             pad = '  '
         print (f'{pad}[Top {i + 1}] --- Title    : {title}')
+        print (f'              Predicted rating: {score:.2f}/5')
 
         if movie_id in extract_imdb_Links:
             imdb = extract_imdb_Links[movie_id]
