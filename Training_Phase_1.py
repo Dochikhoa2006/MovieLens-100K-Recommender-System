@@ -10,16 +10,17 @@ import matplotlib.pyplot as plt
 import joblib
 import re
 from pathlib import Path
+from functools import lru_cache
 
 
 DATA_DIR = Path(__file__).resolve().parent / "MovieLens_100k_Dataset"
-Links = pd.read_csv(DATA_DIR / "links.csv")
-Movies = pd.read_csv(DATA_DIR / "movies.csv")
-Ratings = pd.read_csv(DATA_DIR / "ratings.csv")
-Tags = pd.read_csv(DATA_DIR / "tags.csv")
+
+
+@lru_cache(maxsize=None)
+def load_dataset(filename):
+    return pd.read_csv(DATA_DIR / filename)
 
 cross_validation = KFold (n_splits = 10, shuffle = True, random_state = 150)
-train_test_split_ratings = cross_validation.split (Ratings)
 RMSE_Matrix_Factorization = []
 RMSE_Factorization_Machine = []
 
@@ -175,6 +176,7 @@ class Factorization_Machine:
 
 def processing_Movies ():
 
+    Movies = load_dataset("movies.csv")
     extract_title_Movies = {}
     extract_genre_Movies = {}
     for index in Movies.index:
@@ -189,6 +191,7 @@ def processing_Movies ():
 
 def processing_Tags ():
 
+    Tags = load_dataset("tags.csv")
     user_ID_Tags = np.array (Tags["userId"].unique ())
     movie_ID_Tags = np.array (Tags["movieId"].unique ())
     n_user_ID_Tags = len (user_ID_Tags)
@@ -211,6 +214,7 @@ def processing_Tags ():
 
 def processing_Links ():
 
+    Links = load_dataset("links.csv")
     extract_imdb_Links = {}
     extract_tmdb_links = {}
 
@@ -228,6 +232,8 @@ def processing_Links ():
 
 def RMSE_of_MF_and_FM (extract_genre_Movies, user_movie_matrix_Tags, convert_unique_user_ID_to_unique_index_Tags, convert_unique_movie_ID_to_unique_index_Tags, extract_imdb_Links, extract_tmdb_links):
 
+    Ratings = load_dataset("ratings.csv")
+    train_test_split_ratings = cross_validation.split (Ratings)
     z = 0
     for train_index, test_index in train_test_split_ratings:
 
@@ -316,7 +322,7 @@ if __name__ == "__main__":
     joblib.dump (convert_unique_user_ID_to_unique_index_Tags, "convert_unique_user_ID_to_unique_index_Tags.pkl")
     joblib.dump (convert_unique_movie_ID_to_unique_index_Tags, "convert_unique_movie_ID_to_unique_index_Tags.pkl")
 
-    unique_movie_id = np.array (Movies["movieId"].unique ())
+    unique_movie_id = np.array (load_dataset("movies.csv")["movieId"].unique ())
     unique_movie_genre = {}
     for key, value in extract_genre_Movies.items ():
         for string in value:
