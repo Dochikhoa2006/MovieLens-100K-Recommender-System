@@ -1,7 +1,7 @@
 import unittest
 
 from Inference import parse_genre_choices
-from recommendation_candidates import build_candidates, rank_recommendations
+from recommendation_candidates import build_candidates, format_movie_genres, rank_recommendations
 
 
 class RecommendationTests(unittest.TestCase):
@@ -58,6 +58,11 @@ class RecommendationTests(unittest.TestCase):
             Unused(), Unused(), 7, ["Comedy"], [10], {10: ["Action"]}, set(), 5,
         )
         self.assertEqual(results, [])
+
+    def test_movie_genre_display(self):
+        self.assertEqual(format_movie_genres(["Adventure", "Comedy"]), "Adventure, Comedy")
+        self.assertEqual(format_movie_genres(["(no genres listed)"]), "No genres listed")
+        self.assertEqual(format_movie_genres([]), "No genres listed")
 
 
 if __name__ == "__main__":

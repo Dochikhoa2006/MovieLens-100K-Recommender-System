@@ -2,7 +2,7 @@ import streamlit as st
 import joblib
 from pathlib import Path
 from rated_movies import load_rated_movies
-from recommendation_candidates import rank_recommendations
+from recommendation_candidates import format_movie_genres, rank_recommendations
 from assets import require_inference_assets
 
 st.set_page_config (page_title = "Movie Recommender", layout = "centered")
@@ -73,6 +73,7 @@ if st.button ("Get Recommendations"):
                 title = extract_title_Movies.get(movie_id, "Unknown Title")
                 
                 with st.expander(f"Top {i+1}: {title} — predicted rating {score:.2f}/5"):
+                    st.caption(f"Genres: {format_movie_genres(genres_by_movie.get(movie_id, []))}")
                     if movie_id in extract_imdb_Links:
                         imdb = str(extract_imdb_Links[movie_id]).zfill(7)
                         st.markdown(f"[🔗 View on IMDB](https://www.imdb.com/title/tt{imdb}/)")

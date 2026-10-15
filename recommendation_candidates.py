@@ -35,3 +35,13 @@ def rank_recommendations(
 
     scores = model.predict(feature_encoder.CSC_Inference(features))
     return sorted(zip(scores, candidate_ids), reverse=True)[:top_k]
+
+
+def format_movie_genres(genres):
+    """Format movie metadata for recommendation details."""
+    if not genres:
+        return "No genres listed"
+    return ", ".join(
+        "No genres listed" if genre == "(no genres listed)" else genre
+        for genre in genres
+    )

@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import joblib
 from rated_movies import load_rated_movies
-from recommendation_candidates import rank_recommendations
+from recommendation_candidates import format_movie_genres, rank_recommendations
 from assets import require_inference_assets
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -107,6 +107,7 @@ def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None):
             pad = '  '
         print (f'{pad}[Top {i + 1}] --- Title    : {title}')
         print (f'              Predicted rating: {score:.2f}/5')
+        print (f'              Genres: {format_movie_genres(genres_by_movie.get(movie_id, []))}')
 
         if movie_id in extract_imdb_Links:
             imdb = str (extract_imdb_Links[movie_id]).zfill (7)
