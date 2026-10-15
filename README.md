@@ -131,9 +131,9 @@ The superior performance of the Factorization Machine in this comparison likely 
 
 4.  **Command line inference** (after preparing the assets):
     ```bash
-    python Inference.py --user-id 1 --genres Adventure,Action --top-k 10
+    python Inference.py --user-id 1 --genres Adventure,Action --top-k 10 --output recommendations.csv
     ```
-    Genre names are case insensitive; numbers from `python Inference.py --list-genres` also work. Omit `--user-id` or `--genres` to be prompted interactively. Run `python Inference.py --help` for all options.
+    Genre names are case insensitive; numbers from `python Inference.py --list-genres` also work. Omit `--user-id` or `--genres` to be prompted interactively, and omit `--output` to print results only. Run `python Inference.py --help` for all options.
 
 Run the code tests with `python -m unittest discover -s tests`. They do not require the dataset or trained model files.
 

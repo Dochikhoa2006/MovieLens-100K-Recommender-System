@@ -5,6 +5,7 @@ import joblib
 from rated_movies import load_rated_movies
 from recommendation_candidates import format_movie_genres, rank_recommendations
 from assets import require_inference_assets
+from recommendation_export import recommendations_csv
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -56,7 +57,7 @@ def parse_genre_choices(raw_choices, available_genres):
     return selected, invalid
 
 
-def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None):
+def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None, output_path=None):
     (model, FM, unique_movie_id, genre_dict, genres_by_movie,
      extract_title_Movies, extract_imdb_Links, extract_tmdb_link, rated_movies) = load_assets()
 
@@ -122,6 +123,14 @@ def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None):
             print (f'              TMDB Link: Sorry! We dont have TMDB Link for this movie :( ')
 
         print ('')
+
+    if output_path is not None:
+        with Path(output_path).open("w", encoding="utf-8", newline="") as output_file:
+            output_file.write(recommendations_csv(
+                recommendations, extract_title_Movies, genres_by_movie,
+                extract_imdb_Links, extract_tmdb_link,
+            ))
+        print(f"Saved recommendations to {output_path}")
         
 
 if __name__ == "__main__":
@@ -129,6 +138,7 @@ if __name__ == "__main__":
     parser.add_argument("--user-id", type=int, help="Known user ID, or -1 for a new user")
     parser.add_argument("--genres", help="Comma-separated genre names or numbers")
     parser.add_argument("--top-k", type=int, default=5, help="Number of recommendations (default: 5)")
+    parser.add_argument("--output", type=Path, help="Save the results as a CSV file")
     parser.add_argument("--list-genres", action="store_true", help="Show genre numbers and exit")
     args = parser.parse_args()
     if args.top_k < 1:
@@ -137,8 +147,8 @@ if __name__ == "__main__":
         if args.list_genres:
             print_genres(joblib.load(BASE_DIR / "unique_movie_genre.pkl").keys())
             raise SystemExit(0)
-        print_recommended_movie (args.top_k, args.user_id, args.genres)
-    except FileNotFoundError as error:
+        print_recommended_movie (args.top_k, args.user_id, args.genres, args.output)
+    except OSError as error:
         parser.exit(1, f"{error}\n")
     except ValueError:
         print ("\n----------- ERROR: please type only integer AND not leave it blank -----------")

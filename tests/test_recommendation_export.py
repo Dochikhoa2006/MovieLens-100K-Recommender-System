@@ -1,7 +1,12 @@
 import csv
+from contextlib import redirect_stdout
 from io import StringIO
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
+from Inference import print_recommended_movie
 from recommendation_export import recommendations_csv
 
 
@@ -26,6 +31,32 @@ class RecommendationExportTests(unittest.TestCase):
         self.assertEqual(rows[1]["title"], "'=1+1")
         self.assertEqual(rows[1]["genres"], "No genres listed")
         self.assertEqual(rows[1]["imdbUrl"], "")
+
+    def test_cli_can_save_the_same_recommendation_as_csv(self):
+        class Encoder:
+            def CSC_Inference(self, features):
+                return features
+
+        class Model:
+            def predict(self, features):
+                return [4.2]
+
+        assets = (
+            Model(), Encoder(), [10], {"Action": True}, {10: ["Action"]},
+            {10: "Test Movie"}, {10: 12345}, {10: 99}, {7: set()},
+        )
+        with TemporaryDirectory() as directory:
+            output = Path(directory) / "recommendations.csv"
+            with patch("Inference.load_assets", return_value=assets):
+                with redirect_stdout(StringIO()):
+                    print_recommended_movie(1, user_id=7, genre_choices="Action", output_path=output)
+
+            with output.open(newline="", encoding="utf-8") as csv_file:
+                rows = list(csv.DictReader(csv_file))
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["title"], "Test Movie")
+        self.assertEqual(rows[0]["predictedRating"], "4.20")
 
 
 if __name__ == "__main__":
