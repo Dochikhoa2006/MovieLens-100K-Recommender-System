@@ -133,6 +133,8 @@ The superior performance of the Factorization Machine in this comparison likely 
     ```
     Genre names are case insensitive; numbers from `python Inference.py --list-genres` also work. Omit `--user-id` or `--genres` to be prompted interactively. Run `python Inference.py --help` for all options.
 
+Run the code tests with `python -m unittest discover -s tests`. They do not require the dataset or trained model files.
+
 ## License
 
 This project is licensed under the **CC-BY (Creative Commons Attribution)** license.
