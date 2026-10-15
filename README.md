@@ -121,9 +121,9 @@ The superior performance of the Factorization Machine in this comparison likely 
 
 3.  **Command line inference** (with the dataset and trained `.pkl` files in place):
     ```bash
-    python Inference.py --user-id 1 --genres 1,8 --top-k 10
+    python Inference.py --user-id 1 --genres Adventure,Action --top-k 10
     ```
-    Run `python Inference.py --list-genres` to see genre numbers. Omit `--user-id` or `--genres` to be prompted interactively. Run `python Inference.py --help` for all options.
+    Genre names are case insensitive; numbers from `python Inference.py --list-genres` also work. Omit `--user-id` or `--genres` to be prompted interactively. Run `python Inference.py --help` for all options.
 
 ## License
 

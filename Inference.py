@@ -29,6 +29,31 @@ def print_genres(genres):
         print(f"{index}: {genre}")
 
 
+def parse_genre_choices(raw_choices, available_genres):
+    names = {genre.casefold(): genre for genre in available_genres}
+    names["none of the above"] = "(no genres listed)"
+    selected = []
+    invalid = []
+    seen = set()
+
+    for token in raw_choices.split(","):
+        choice = token.strip()
+        try:
+            index = int(choice)
+        except ValueError:
+            genre = names.get(choice.casefold())
+        else:
+            genre = available_genres[index - 1] if 1 <= index <= len(available_genres) else None
+
+        if genre is None:
+            invalid.append(choice or "(blank)")
+        elif genre not in seen:
+            selected.append(genre)
+            seen.add(genre)
+
+    return selected, invalid
+
+
 def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None):
     (model, FM, unique_movie_id, genre_dict, genres_by_movie,
      extract_title_Movies, extract_imdb_Links, extract_tmdb_link, rated_movies) = load_assets()
@@ -47,32 +72,17 @@ def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None):
     if genre_choices is None:
         print ("\n+ List of Movie Genres:")
         print_genres(unique_movie_genre)
-        genre_choices = input ("Select your favourite genres (use comma to separate choices): ")
-    movie_genre_idx = []
-    invalid_choices = []
-    for choice in genre_choices.split (","):
-        choice = choice.strip ()
-        try:
-            movie_genre_idx.append (int (choice))
-        except ValueError:
-            invalid_choices.append (choice or "(blank)")
+        genre_choices = input ("Select genres by number or name (comma separated): ")
+    movie_genre, invalid_choices = parse_genre_choices(genre_choices, unique_movie_genre)
 
     if invalid_choices:
-        print (f"\n+ Ignoring non-numeric choices: {', '.join (invalid_choices)}")
+        print (f"\n+ Ignoring invalid genre choices: {', '.join (invalid_choices)}")
 
-    print ("\n--------------------- System is processing, please wait... --------------------- ")
-    
-    out_of_range = [idx for idx in movie_genre_idx if not (1 <= idx <= len (unique_movie_genre))]
-    if out_of_range:
-        temp = ', '.join (map (str, out_of_range))
-        print (f"\n+ Your list contains out of selection range (including: {temp}) so we'll erase them...")
-        movie_genre_idx = [idx for idx in movie_genre_idx if 1 <= idx <= len (unique_movie_genre)]
-
-    if not movie_genre_idx:
+    if not movie_genre:
         print ("\n+ Please select at least one valid genre.")
         return
-    
-    movie_genre = [unique_movie_genre[idx - 1] for idx in movie_genre_idx]
+
+    print ("\n--------------------- System is processing, please wait... --------------------- ")
     already_rated = rated_movies.get(user_id, set())
     X, candidate_movie_ids = build_candidates(
         user_id, movie_genre, unique_movie_id, genres_by_movie, already_rated
@@ -118,7 +128,7 @@ def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Recommend movies by genre.")
     parser.add_argument("--user-id", type=int, help="Known user ID, or -1 for a new user")
-    parser.add_argument("--genres", help="Comma-separated genre numbers shown in the interactive menu")
+    parser.add_argument("--genres", help="Comma-separated genre names or numbers")
     parser.add_argument("--top-k", type=int, default=5, help="Number of recommendations (default: 5)")
     parser.add_argument("--list-genres", action="store_true", help="Show genre numbers and exit")
     args = parser.parse_args()
