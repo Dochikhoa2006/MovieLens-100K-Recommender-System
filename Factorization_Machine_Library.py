@@ -28,7 +28,7 @@ class FM_Regression:
 
         for epoch in range(self.n_iter):
 
-            total_error = 0
+            total_squared_error = 0.0
             for i in range(n_samples):
                 indices = X[i].indices
                 values = X[i].data
@@ -41,10 +41,9 @@ class FM_Regression:
                 interaction_term = 0.5 * np.sum(sum_v_x**2 - sum_sq_v_x)
                 
                 y_hat = linear_term + interaction_term
-                error = y_hat - y[i]
-                
-                error = np.clip(error, -5.0, 5.0)
-                total_error += error**2
+                raw_error = y_hat - y[i]
+                total_squared_error += raw_error**2
+                error = np.clip(raw_error, -5.0, 5.0)
 
                 self.w0 -= self.step_size * error 
 
@@ -59,11 +58,11 @@ class FM_Regression:
                     update_v = self.step_size * (error * grad_v + self.l2_reg * factors)
                     factors -= np.clip(update_v, -0.1, 0.1)
 
-            current_rmse = np.sqrt(total_error / n_samples)
+            current_rmse = np.sqrt(total_squared_error / n_samples)
             print(f'Iteration: {epoch + 1} | RMSE: {current_rmse:.4f}')
 
-            if np.isnan(total_error) or current_rmse > 100:
-                print(f"----- Divergence detected at Epoch {epoch}. Lowering step_size is required -----")
+            if not np.isfinite(current_rmse) or current_rmse > 100:
+                print(f"----- Divergence detected at Epoch {epoch + 1}. Lowering step_size is required -----")
                 break
 
     def predict(self, X):
