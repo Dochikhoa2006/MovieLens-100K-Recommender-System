@@ -3,12 +3,14 @@ import joblib
 from pathlib import Path
 from rated_movies import load_rated_movies
 from recommendation_candidates import build_candidates
+from assets import require_inference_assets
 
 st.set_page_config (page_title = "Movie Recommender", layout = "centered")
 BASE_DIR = Path(__file__).resolve().parent
 
 @st.cache_resource
 def load_assets ():
+    require_inference_assets(BASE_DIR)
     model = joblib.load (BASE_DIR / "Factorization_Model_Trained.pkl")
     FM = joblib.load (BASE_DIR / "FM.pkl")
     unique_movie_id = joblib.load (BASE_DIR / "unique_movie_id.pkl")
@@ -19,7 +21,11 @@ def load_assets ():
     extract_tmdb_link = joblib.load (BASE_DIR / "extract_tmdb_links.pkl")
     return model, FM, unique_movie_id, genre_dict, genres_by_movie, extract_title_Movies, extract_imdb_Links, extract_tmdb_link
 
-model, FM, unique_movie_id, genre_dict, genres_by_movie, extract_title_Movies, extract_imdb_Links, extract_tmdb_link = load_assets ()
+try:
+    model, FM, unique_movie_id, genre_dict, genres_by_movie, extract_title_Movies, extract_imdb_Links, extract_tmdb_link = load_assets ()
+except FileNotFoundError as error:
+    st.error(str(error))
+    st.stop()
 
 @st.cache_data
 def get_rated_movies():

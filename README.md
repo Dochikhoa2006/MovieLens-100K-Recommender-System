@@ -108,7 +108,15 @@ The superior performance of the Factorization Machine in this comparison likely 
     cd MovieLens-100K-Recommender-System
     ```
 
-2.  **Docker**:
+2.  **Prepare local assets**: Place `movies.csv`, `ratings.csv`, `tags.csv`, and `links.csv` in `MovieLens_100k_Dataset/`. The CSV and `.pkl` files are ignored by Git and are not included in a fresh clone. To generate the model files, install the dependencies and run the training scripts in order:
+    ```bash
+    pip install -r requirements.txt
+    python Training_Phase_1.py
+    python Training_Phase_2.py
+    ```
+    If you already have compatible trained `.pkl` files, place them in the repository root instead. Inference requires `ratings.csv` and the eight `.pkl` files listed in [assets.py](assets.py).
+
+3.  **Docker**:
     * To build docker image:
         ```bash
         docker build -t movie-recommendation-system .
@@ -119,7 +127,7 @@ The superior performance of the Factorization Machine in this comparison likely 
         ```
     * Open [http://localhost:8501](http://localhost:8501) in your browser.
 
-3.  **Command line inference** (with the dataset and trained `.pkl` files in place):
+4.  **Command line inference** (after preparing the assets):
     ```bash
     python Inference.py --user-id 1 --genres Adventure,Action --top-k 10
     ```

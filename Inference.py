@@ -4,11 +4,13 @@ import numpy as np
 import joblib
 from rated_movies import load_rated_movies
 from recommendation_candidates import build_candidates
+from assets import require_inference_assets
 
 BASE_DIR = Path(__file__).resolve().parent
 
 
 def load_assets():
+    require_inference_assets(BASE_DIR)
     model = joblib.load(BASE_DIR / "Factorization_Model_Trained.pkl")
     FM = joblib.load(BASE_DIR / "FM.pkl")
     unique_movie_id = joblib.load(BASE_DIR / "unique_movie_id.pkl")
@@ -132,12 +134,14 @@ if __name__ == "__main__":
     parser.add_argument("--top-k", type=int, default=5, help="Number of recommendations (default: 5)")
     parser.add_argument("--list-genres", action="store_true", help="Show genre numbers and exit")
     args = parser.parse_args()
-    if args.list_genres:
-        print_genres(joblib.load(BASE_DIR / "unique_movie_genre.pkl").keys())
-        raise SystemExit(0)
     if args.top_k < 1:
         parser.error("--top-k must be at least 1")
     try:
+        if args.list_genres:
+            print_genres(joblib.load(BASE_DIR / "unique_movie_genre.pkl").keys())
+            raise SystemExit(0)
         print_recommended_movie (args.top_k, args.user_id, args.genres)
+    except FileNotFoundError as error:
+        parser.exit(1, f"{error}\n")
     except ValueError:
         print ("\n----------- ERROR: please type only integer AND not leave it blank -----------")
