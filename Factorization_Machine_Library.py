@@ -1,5 +1,4 @@
 import numpy as np
-from scipy import sparse
 
 class FM_Regression:
 
@@ -13,8 +12,7 @@ class FM_Regression:
         self.V = None
 
     def fit(self, X, y):
-        if sparse.isspmatrix_csc(X):
-            X = X.tocsr()
+        X = X.tocsr()
             
         n_samples, n_features = X.shape
         self.w0 = np.mean(y) 
@@ -50,10 +48,10 @@ class FM_Regression:
                     grad_w = error * val + self.l2_reg * self.w[global_idx]
                     self.w[global_idx] -= self.step_size * grad_w
                     
-                    for f in range(self.rank):
-                        grad_v = val * (sum_v_x[f] - self.V[global_idx, f] * val)
-                        update_v = self.step_size * (error * grad_v + self.l2_reg * self.V[global_idx, f])
-                        self.V[global_idx, f] -= np.clip(update_v, -0.1, 0.1)
+                    factors = self.V[global_idx, :]
+                    grad_v = val * (sum_v_x - factors * val)
+                    update_v = self.step_size * (error * grad_v + self.l2_reg * factors)
+                    factors -= np.clip(update_v, -0.1, 0.1)
 
             current_rmse = np.sqrt(total_error / n_samples)
             print(f'Iteration: {epoch + 1} | RMSE: {current_rmse:.4f}')
