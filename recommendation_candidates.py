@@ -1,3 +1,6 @@
+from heapq import nlargest
+
+
 def build_candidates(user_id, selected_genres, movie_ids, genres_by_movie, rated_movie_ids):
     """Build model features for unrated movies in the selected genres."""
     selected = set(selected_genres)
@@ -34,7 +37,7 @@ def rank_recommendations(
         return []
 
     scores = model.predict(feature_encoder.CSC_Inference(features))
-    return sorted(zip(scores, candidate_ids), reverse=True)[:top_k]
+    return nlargest(top_k, zip(scores, candidate_ids))
 
 
 def format_movie_genres(genres):
