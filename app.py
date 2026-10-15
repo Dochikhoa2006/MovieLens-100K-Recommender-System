@@ -4,6 +4,7 @@ from pathlib import Path
 from rated_movies import load_rated_movies
 from recommendation_candidates import format_movie_genres, rank_recommendations
 from assets import require_inference_assets
+from recommendation_export import recommendations_csv
 
 st.set_page_config (page_title = "Movie Recommender", layout = "centered")
 BASE_DIR = Path(__file__).resolve().parent
@@ -85,3 +86,13 @@ if st.button ("Get Recommendations"):
                         st.markdown(f"[🔗 View on TMDB](https://www.themoviedb.org/movie/{tmdb}/)")
                     else:
                         st.write("TMDB Link: Not available")
+
+            st.download_button(
+                "Download recommendations (CSV)",
+                data=recommendations_csv(
+                    recommendations, extract_title_Movies, genres_by_movie,
+                    extract_imdb_Links, extract_tmdb_link,
+                ),
+                file_name="movie_recommendations.csv",
+                mime="text/csv",
+            )
