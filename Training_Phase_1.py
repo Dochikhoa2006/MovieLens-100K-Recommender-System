@@ -79,7 +79,7 @@ class Matrix_Factorization:
                     temp = (train_user_ID_Ratings[i], train_movie_ID_Ratings[j], self.user_movie_matrix[i, j])
                     change_format.append (temp)
         
-        reader = Reader (rating_scale = (0, 5))
+        reader = Reader (rating_scale = (0.5, 5.0))
         df = pd.DataFrame (change_format, columns = ("userId", "movieId", "rating"))
         dataset = Dataset.load_from_df (df, reader)
         X_train = dataset.build_full_trainset ()
@@ -280,7 +280,7 @@ def RMSE_of_MF_and_FM (extract_genre_Movies, user_movie_matrix_Tags, convert_uni
             index = valid_movie_ID_Ratings[i]
             test_convert_unique_movie_ID_to_unique_index_Ratings[index] = i
 
-        model = SVDpp ()
+        model = SVDpp (random_state = 150)
         MF = Matrix_Factorization ()
         MF.user_movie_matrix_creation (False, "rating", train_user_ID_Ratings, train_movie_ID_Ratings, False, train_n_user_ID_Ratings, train_m_movie_ID_Ratings, train_Ratings, train_convert_unique_user_ID_to_unique_index_Ratings, train_convert_unique_movie_ID_to_unique_index_Ratings)
         train_user_movie_Ratings = MF.get_user_movie_matrix ()
