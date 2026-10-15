@@ -1,10 +1,17 @@
 import unittest
+from contextlib import redirect_stdout
+from io import StringIO
+from unittest.mock import patch
 
-from Inference import parse_genre_choices
+from Inference import parse_genre_choices, prompt_user_id
 from recommendation_candidates import build_candidates, format_movie_genres, rank_recommendations
 
 
 class RecommendationTests(unittest.TestCase):
+    def test_interactive_user_id_retries_invalid_input(self):
+        with patch("builtins.input", side_effect=["", "seven", "-1"]), redirect_stdout(StringIO()):
+            self.assertEqual(prompt_user_id(), -1)
+
     def test_candidates_use_movie_genres_and_skip_rated_movies(self):
         features, movie_ids = build_candidates(
             user_id=7,

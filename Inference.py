@@ -1,6 +1,5 @@
 import argparse
 from pathlib import Path
-import numpy as np
 import joblib
 from rated_movies import load_rated_movies
 from recommendation_candidates import format_movie_genres, rank_recommendations
@@ -30,6 +29,14 @@ def print_genres(genres):
         if genre == "(no genres listed)":
             genre = "None of the above"
         print(f"{index}: {genre}")
+
+
+def prompt_user_id():
+    while True:
+        try:
+            return int(input("\n+ Type your User ID (enter -1 if new): ").strip())
+        except ValueError:
+            print("\n+ Please enter an integer User ID, or -1 if you are new.")
 
 
 def parse_genre_choices(raw_choices, available_genres):
@@ -65,7 +72,7 @@ def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None, outp
         print ("\n--------------------- Follow Instructions ---------------------")
 
     if user_id is None:
-        user_id = np.int64 (input ("\n+ Type your User ID (if you dont have, better enter -1): ").strip ())
+        user_id = prompt_user_id()
 
     if user_id != -1 and user_id not in rated_movies:
         print ("\n+ Unknown User ID. Enter a known ID or -1 if you are a new user.")
@@ -150,5 +157,3 @@ if __name__ == "__main__":
         print_recommended_movie (args.top_k, args.user_id, args.genres, args.output)
     except OSError as error:
         parser.exit(1, f"{error}\n")
-    except ValueError:
-        print ("\n----------- ERROR: please type only integer AND not leave it blank -----------")
