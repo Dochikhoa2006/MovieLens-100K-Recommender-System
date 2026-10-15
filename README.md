@@ -65,6 +65,8 @@ Matrix Factorization operates by decomposing the sparse user-item interaction ma
 
 K-Fold Cross-Validation: Both candidate models are trained and validated through multiple K-fold cycles. This process splits the data into K subsets, ensuring every data point is used for both training and validation, providing a stable estimate of model performance.
 
+FM training uses a fixed random seed for latent-factor initialization so repeated runs start from the same model parameters.
+
 Performance Comparison: The RMSE results from each fold are collected and visualized using a Box Plot. This allows for a direct comparison of the error distribution, median performance, and variance between the models:
 
 $$

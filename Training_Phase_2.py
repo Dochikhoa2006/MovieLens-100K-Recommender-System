@@ -29,7 +29,7 @@ MF = Matrix_Factorization ()
 MF.user_movie_matrix_creation (False, "rating", train_user_ID_Ratings, train_movie_ID_Ratings, False, train_n_user_ID_Ratings, train_m_movie_ID_Ratings, Ratings, train_convert_unique_user_ID_to_unique_index_Ratings, train_convert_unique_movie_ID_to_unique_index_Ratings)
 train_user_movie_Ratings = MF.get_user_movie_matrix ()
 
-model = FM_Regression ()
+model = FM_Regression (random_state = 150)
 FM = Factorization_Machine ()
 FM.compressed_column_wise (True, train_user_ID_Ratings, train_movie_ID_Ratings, train_user_movie_Ratings, user_movie_matrix_Tags, extract_genre_Movies, convert_unique_user_ID_to_unique_index_Tags, convert_unique_movie_ID_to_unique_index_Tags)
 FM.train_model (model)

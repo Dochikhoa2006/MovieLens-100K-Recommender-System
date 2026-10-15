@@ -2,11 +2,12 @@ import numpy as np
 
 class FM_Regression:
 
-    def __init__(self, n_iter = 7, rank = 180, l2_reg = 0.0000000000000000001, step_size = 0.0000000000000000000001):
+    def __init__(self, n_iter = 7, rank = 180, l2_reg = 0.0000000000000000001, step_size = 0.0000000000000000000001, random_state = None):
         self.n_iter = n_iter
         self.rank = rank
         self.l2_reg = l2_reg
         self.step_size = step_size
+        self.random_state = random_state
         self.w0 = 0
         self.w = None
         self.V = None
@@ -18,7 +19,12 @@ class FM_Regression:
         self.w0 = np.mean(y) 
         self.w = np.zeros(n_features)
 
-        self.V = np.random.normal(scale=0.0001, size=(n_features, self.rank))
+        if self.random_state is None:
+            self.V = np.random.normal(scale=0.0001, size=(n_features, self.rank))
+        else:
+            self.V = np.random.default_rng(self.random_state).normal(
+                scale=0.0001, size=(n_features, self.rank)
+            )
 
         for epoch in range(self.n_iter):
 
