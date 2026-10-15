@@ -2,7 +2,7 @@ import streamlit as st
 import joblib
 from pathlib import Path
 from rated_movies import load_rated_movies
-from recommendation_candidates import build_candidates
+from recommendation_candidates import rank_recommendations
 from assets import require_inference_assets
 
 st.set_page_config (page_title = "Movie Recommender", layout = "centered")
@@ -58,19 +58,14 @@ if st.button ("Get Recommendations"):
     else:
         with st.spinner ("Processing..."):
             already_rated = rated_movies.get(user_id, set())
-            X, candidate_movie_ids = build_candidates(
-                user_id, selected_genres, unique_movie_id, genres_by_movie, already_rated
+            recommendations = rank_recommendations(
+                model, FM, user_id, selected_genres, unique_movie_id,
+                genres_by_movie, already_rated, top_k,
             )
 
-            if not X:
+            if not recommendations:
                 st.info("No unrated movies match the selected genres.")
                 st.stop()
-
-            X_transformed = FM.CSC_Inference(X)
-            rating_score = model.predict(X_transformed)
-            
-            combined = sorted(zip(rating_score, candidate_movie_ids), reverse=True)
-            recommendations = combined[:top_k]
             
             st.success (f"Top {len(recommendations)} Recommendations for you:")
             

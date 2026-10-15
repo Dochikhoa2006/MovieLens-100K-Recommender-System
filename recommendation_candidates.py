@@ -20,3 +20,18 @@ def build_candidates(user_id, selected_genres, movie_ids, genres_by_movie, rated
         candidate_ids.append(movie_id)
 
     return features, candidate_ids
+
+
+def rank_recommendations(
+    model, feature_encoder, user_id, selected_genres, movie_ids,
+    genres_by_movie, rated_movie_ids, top_k,
+):
+    """Score matching unseen movies and return the highest-ranked results."""
+    features, candidate_ids = build_candidates(
+        user_id, selected_genres, movie_ids, genres_by_movie, rated_movie_ids
+    )
+    if not features:
+        return []
+
+    scores = model.predict(feature_encoder.CSC_Inference(features))
+    return sorted(zip(scores, candidate_ids), reverse=True)[:top_k]

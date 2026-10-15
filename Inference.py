@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import joblib
 from rated_movies import load_rated_movies
-from recommendation_candidates import build_candidates
+from recommendation_candidates import rank_recommendations
 from assets import require_inference_assets
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -86,21 +86,17 @@ def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None):
 
     print ("\n--------------------- System is processing, please wait... --------------------- ")
     already_rated = rated_movies.get(user_id, set())
-    X, candidate_movie_ids = build_candidates(
-        user_id, movie_genre, unique_movie_id, genres_by_movie, already_rated
+    recommendations = rank_recommendations(
+        model, FM, user_id, movie_genre, unique_movie_id,
+        genres_by_movie, already_rated, Top_K_Movie,
     )
 
-    if not X:
+    if not recommendations:
         print ("\n+ No unrated movies match the selected genres.")
         return
 
-    X = FM.CSC_Inference (X)
-    rating_score = model.predict (X)
-    combined = zip (rating_score, candidate_movie_ids)
-    sort_rating_score = sorted (combined, reverse=True)
-
     print ("\n+", end = '')
-    for i, pair in enumerate (sort_rating_score[:Top_K_Movie]):
+    for i, pair in enumerate (recommendations):
         score = pair[0]
         movie_id = pair[1]
         title = extract_title_Movies[movie_id]  
