@@ -8,6 +8,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import joblib
+import argparse
 import re
 from pathlib import Path
 from functools import lru_cache
@@ -309,18 +310,17 @@ def RMSE_GRAPH_of_MF_and_FM ():
     plt.savefig ("RMSE_COMPARISON.png")
     plt.show ()
 
-if __name__ == "__main__":
-
+def prepare_artifacts(output_dir=None):
+    output_dir = Path.cwd() if output_dir is None else Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
     extract_title_Movies, extract_genre_Movies = processing_Movies ()
     user_movie_matrix_Tags, convert_unique_user_ID_to_unique_index_Tags, convert_unique_movie_ID_to_unique_index_Tags = processing_Tags ()
     extract_imdb_Links, extract_tmdb_links = processing_Links ()
-    RMSE_of_MF_and_FM (extract_genre_Movies, user_movie_matrix_Tags, convert_unique_user_ID_to_unique_index_Tags, convert_unique_movie_ID_to_unique_index_Tags, extract_imdb_Links, extract_tmdb_links)
-    RMSE_GRAPH_of_MF_and_FM () 
 
-    joblib.dump (user_movie_matrix_Tags, "user_movie_matrix_Tags.pkl")
-    joblib.dump (extract_genre_Movies, "extract_genre_Movies.pkl")
-    joblib.dump (convert_unique_user_ID_to_unique_index_Tags, "convert_unique_user_ID_to_unique_index_Tags.pkl")
-    joblib.dump (convert_unique_movie_ID_to_unique_index_Tags, "convert_unique_movie_ID_to_unique_index_Tags.pkl")
+    joblib.dump (user_movie_matrix_Tags, output_dir / "user_movie_matrix_Tags.pkl")
+    joblib.dump (extract_genre_Movies, output_dir / "extract_genre_Movies.pkl")
+    joblib.dump (convert_unique_user_ID_to_unique_index_Tags, output_dir / "convert_unique_user_ID_to_unique_index_Tags.pkl")
+    joblib.dump (convert_unique_movie_ID_to_unique_index_Tags, output_dir / "convert_unique_movie_ID_to_unique_index_Tags.pkl")
 
     unique_movie_id = np.array (load_dataset("movies.csv")["movieId"].unique ())
     unique_movie_genre = {}
@@ -328,8 +328,25 @@ if __name__ == "__main__":
         for string in value:
             unique_movie_genre[string] = True
 
-    joblib.dump (unique_movie_id, "unique_movie_id.pkl")
-    joblib.dump (unique_movie_genre, "unique_movie_genre.pkl")
-    joblib.dump (extract_title_Movies, "extract_title_Movies.pkl")
-    joblib.dump (extract_imdb_Links, "extract_imdb_Links.pkl")
-    joblib.dump (extract_tmdb_links, "extract_tmdb_links.pkl")
+    joblib.dump (unique_movie_id, output_dir / "unique_movie_id.pkl")
+    joblib.dump (unique_movie_genre, output_dir / "unique_movie_genre.pkl")
+    joblib.dump (extract_title_Movies, output_dir / "extract_title_Movies.pkl")
+    joblib.dump (extract_imdb_Links, output_dir / "extract_imdb_Links.pkl")
+    joblib.dump (extract_tmdb_links, output_dir / "extract_tmdb_links.pkl")
+
+    return (extract_genre_Movies, user_movie_matrix_Tags,
+            convert_unique_user_ID_to_unique_index_Tags,
+            convert_unique_movie_ID_to_unique_index_Tags,
+            extract_imdb_Links, extract_tmdb_links)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Prepare movie metadata and optionally compare models.")
+    parser.add_argument("--prepare-only", action="store_true",
+                        help="Write metadata artifacts without running cross-validation.")
+    args = parser.parse_args()
+
+    evaluation_inputs = prepare_artifacts()
+    if not args.prepare_only:
+        RMSE_of_MF_and_FM(*evaluation_inputs)
+        RMSE_GRAPH_of_MF_and_FM()

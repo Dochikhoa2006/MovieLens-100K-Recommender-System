@@ -113,9 +113,10 @@ The superior performance of the Factorization Machine in this comparison likely 
 2.  **Prepare local assets**: Place `movies.csv`, `ratings.csv`, `tags.csv`, and `links.csv` in `MovieLens_100k_Dataset/`. The CSV and `.pkl` files are ignored by Git and are not included in a fresh clone. To generate the model files, install the dependencies and run the training scripts in order:
     ```bash
     pip install -r requirements.txt
-    python Training_Phase_1.py
+    python Training_Phase_1.py --prepare-only
     python Training_Phase_2.py
     ```
+    Run `python Training_Phase_1.py` without the flag to also perform the full cross-validation comparison and generate its RMSE plot.
     If you already have compatible trained `.pkl` files, place them in the repository root instead. Inference requires `ratings.csv` and the eight `.pkl` files listed in [assets.py](assets.py).
 
 3.  **Docker**:
