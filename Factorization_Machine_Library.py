@@ -32,8 +32,6 @@ class FM_Regression:
             for i in range(n_samples):
                 indices = X[i].indices
                 values = X[i].data
-                if len(indices) == 0: continue
-
                 linear_term = self.w0 + np.dot(self.w[indices], values)
                 v_subset = self.V[indices, :]
                 sum_v_x = np.dot(values, v_subset) 

@@ -35,6 +35,16 @@ class FactorizationMachineTests(unittest.TestCase):
         np.testing.assert_array_equal(models[0].w, models[1].w)
         np.testing.assert_array_equal(models[0].V, models[1].V)
 
+    def test_empty_feature_rows_update_global_bias(self):
+        rows = sparse.csr_matrix((2, 1), dtype=float)
+        model = FM_Regression(n_iter=1, rank=1, step_size=0.1, random_state=42)
+
+        with redirect_stdout(StringIO()):
+            model.fit(rows, np.array([5.0, 1.0]))
+
+        self.assertAlmostEqual(model.w0, 2.98)
+        np.testing.assert_allclose(model.predict(rows), [2.98, 2.98])
+
     def test_training_rmse_uses_unclipped_residual(self):
         rows = sparse.csr_matrix([[1e6, 1e6], [0, 0]], dtype=float)
         model = FM_Regression(n_iter=1, rank=1, step_size=0, random_state=42)
