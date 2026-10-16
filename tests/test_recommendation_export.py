@@ -58,6 +58,25 @@ class RecommendationExportTests(unittest.TestCase):
         self.assertEqual(rows[0]["title"], "Test Movie")
         self.assertEqual(rows[0]["predictedRating"], "4.20")
 
+    def test_cli_exports_movie_with_missing_title(self):
+        assets = (
+            object(), object(), [10], {"Action": True}, {10: ["Action"]},
+            {}, {}, {}, {7: set()},
+        )
+        with TemporaryDirectory() as directory:
+            output = Path(directory) / "recommendations.csv"
+            printed = StringIO()
+            with patch("Inference.load_assets", return_value=assets):
+                with patch("Inference.rank_recommendations", return_value=[(4.2, 10)]):
+                    with redirect_stdout(printed):
+                        print_recommended_movie(1, user_id=7, genre_choices="Action", output_path=output)
+
+            with output.open(newline="", encoding="utf-8") as csv_file:
+                rows = list(csv.DictReader(csv_file))
+
+        self.assertIn("Unknown Title", printed.getvalue())
+        self.assertEqual(rows[0]["title"], "Unknown Title")
+
 
 if __name__ == "__main__":
     unittest.main()

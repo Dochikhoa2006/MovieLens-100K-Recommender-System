@@ -107,7 +107,7 @@ def print_recommended_movie (Top_K_Movie, user_id=None, genre_choices=None, outp
     for i, pair in enumerate (recommendations):
         score = pair[0]
         movie_id = pair[1]
-        title = extract_title_Movies[movie_id]  
+        title = extract_title_Movies.get(movie_id, "Unknown Title")
 
         if i == 0:
             pad = ' '
